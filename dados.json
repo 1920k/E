@@ -1,0 +1,32 @@
+{
+  "Domingo": [
+    {
+      "horario": "08:00",
+      "cargos": [
+        {
+          "nome": "Principal",
+          "pessoas": [
+            "Kaio Alan"
+          ]
+        },
+        {
+          "nome": "Credencia",
+          "pessoas": [
+            "Alan"
+          ]
+        }
+      ]
+    },
+    {
+      "horario": "10:00",
+      "cargos": [
+        {
+          "nome": "Credencia",
+          "pessoas": [
+            "kaio"
+          ]
+        }
+      ]
+    }
+  ]
+}

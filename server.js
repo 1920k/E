@@ -1,42 +1,48 @@
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
-const app = express();
+const bodyParser = require("body-parser");
 
-const PORT = 5000;
-const ARQUIVO = __dirname + "/dados.json";
+const app = express();
+const PORT = process.env.PORT || 5000; // usar porta do Railway
+const ARQUIVO = "./dados.json";
 
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-// 🔹 Carregar dados do arquivo
-const carregar = () => {
+// 🔹 Carregar dados do arquivo JSON
+const carregarDados = () => {
   if (!fs.existsSync(ARQUIVO)) {
     fs.writeFileSync(ARQUIVO, JSON.stringify({}));
   }
   return JSON.parse(fs.readFileSync(ARQUIVO));
 };
 
-// 🔹 Salvar dados no arquivo
-const salvar = (dados) => {
+// 🔹 Salvar dados no arquivo JSON
+const salvarDados = (dados) => {
   fs.writeFileSync(ARQUIVO, JSON.stringify(dados, null, 2));
 };
 
-// GET → buscar escala
+// ✅ Rota GET → pega todos os dados
 app.get("/dados", (req, res) => {
-  res.json(carregar());
+  const dados = carregarDados();
+  res.json(dados);
 });
 
-// POST → salvar escala
+// ✅ Rota POST → sobrescreve os dados
 app.post("/dados", (req, res) => {
-  salvar(req.body);
-  res.json({ sucesso: true });
+  const dados = req.body;
+  salvarDados(dados);
+  res.json({ sucesso: true, dados });
 });
 
-// DELETE → limpar escala
+// ✅ Rota DELETE → limpa tudo
 app.delete("/dados", (req, res) => {
-  salvar({});
-  res.json({ sucesso: true });
+  salvarDados({});
+  res.json({ sucesso: true, mensagem: "Escala apagada com sucesso!" });
 });
 
-app.listen(PORT, () => console.log(`✅ Backend rodando em http://localhost:${PORT}`));
+// 🚀 Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
